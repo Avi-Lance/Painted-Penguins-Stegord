@@ -1,50 +1,27 @@
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
-import './App.css';
+import { Layout, Menu, theme } from 'antd';
 
-function Hello() {
-  return (
-    <div>
-      <div className="Hello">
-        <img width="200" alt="icon" src={icon} />
-      </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="folded hands">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
-      </div>
-    </div>
-  );
-}
+const { Header, Content, Footer, Sider } = Layout;
 
 export default function App() {
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
+
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Hello />} />
-      </Routes>
-    </Router>
+    <Layout>
+      <Sider breakpoint="lg" collapsedWidth="0">
+        <div className="demo-logo-vertical">
+          <Menu theme="dark" mode="inline" />
+        </div>
+      </Sider>
+      <Layout>
+        <Header style={{ padding: 0, background: colorBgContainer }}/>
+        <Content style={{ margin: '24px 16px 0' }}>
+          <div style={{ padding: 24, minHeight: 360, background: colorBgContainer}}>content</div>
+        </Content>
+        <Footer style={{ textAlign: 'center' }}>Stegord ©2023</Footer>
+      </Layout>
+    </Layout>
   );
 }
