@@ -4,6 +4,7 @@ import json
 import base64
 import tempfile
 import psycopg2
+from configparser import ConfigParser
 from stego import StegoTranscoder
 
 # Credentials for prod postgres DB
@@ -28,11 +29,15 @@ def extract_username(event):
   return event["headers"]["username"]
 
 def get_connection():
-  connection = psycopg2.connect(user=CREDENTIALS["username"],
-                              password=CREDENTIALS["password"],
-                              host=CREDENTIALS["host"],
-                              port=CREDENTIALS["port"],
-                              database=CREDENTIALS["database"])
+  parser = ConfigParser()
+  parser.read("config.ini")
+  connection = psycopg2.connect(user=parser.get("database", "username"),
+                              password=parser.get("database", "password"),
+                              host=parser.get("database", "host"),
+                              port=parser.get("database", "port"),
+                              database=parser.get("database", "db_name")
+  )
+
   return connection
 
 def get_last_read_message_number(cursor, username):
@@ -113,6 +118,8 @@ def lambda_handler(event, context):
   # Read request
   coder = StegoTranscoder()
   request = load_stego_body(event, coder)
+
+  # Establish connection
   connection = get_connection()
   cursor = connection.cursor()
 
