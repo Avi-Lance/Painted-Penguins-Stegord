@@ -7,15 +7,6 @@ import psycopg2
 from configparser import ConfigParser
 from stego import StegoTranscoder
 
-# Credentials for prod postgres DB
-CREDENTIALS = {
-  "username": "postgres",
-  "password": "stegordtest",
-  "host": "stegord-test-psql.cmljfd4tgf0o.us-west-2.rds.amazonaws.com",
-  "port": "5432",
-  "database": "stegord"
-}
-
 # Image files
 MEDIUM_IMAGE_NAME = "image.png"
 
@@ -26,7 +17,7 @@ def extract_username(event):
   decoded = jwt.decode(token, options={"verify_signature": False})
   return decoded["cognito:username"]
   """
-  return event["headers"]["username"]
+  return event["headers"]["authorization"]
 
 def get_connection():
   parser = ConfigParser()
@@ -59,7 +50,7 @@ def get_messages(cursor, username, intake_n):
     row = cursor.fetchone()
 
   # Get messages
-  query = "SELECT (account_id, intake_order, content) FROM messages WHERE chat_id = %s AND intake_order >= %s"
+  query = "SELECT account_id, intake_order, content FROM messages WHERE chat_id = %s AND intake_order > %s"
   messages = {}
   max_read_message = intake_n
   for chat_id in chat_ids:
@@ -79,7 +70,7 @@ def get_messages(cursor, username, intake_n):
 
   # Update last read message
   query = "UPDATE account SET last_read_message_id = %s WHERE id = %s RETURNING id"
-  cursor.execute(query, str(max_read_message), username)
+  cursor.execute(query, (max_read_message, username))
 
   response = cursor.fetchone()
   if response is None or response[0] != username:
@@ -88,10 +79,9 @@ def get_messages(cursor, username, intake_n):
 
 def load_stego_body(event, coder):
   # Read image
-  b64_data = event["body"]
-  raw_data = base64.b64decode(b64_data)
+  raw_data = base64.b64decode(event["body"])
 
-  temp_fname = tempfile.NamedTemporaryFile()
+  temp_fname = tempfile.NamedTemporaryFile().name + ".png"
   with open(temp_fname, "wb") as fp:
     fp.write(raw_data)
 
@@ -103,7 +93,7 @@ def load_stego_body(event, coder):
 
 def create_stego_response(message_bytes, coder):
   # Encode data into an image
-  out_fname = tempfile.NamedTemporaryFile()
+  out_fname = tempfile.NamedTemporaryFile().name + ".png"
   if not coder.encode(message_bytes, MEDIUM_IMAGE_NAME, out_fname):
     return None
 
@@ -143,6 +133,7 @@ def lambda_handler(event, context):
 
   # Return
   cursor.close()
+  connection.commit()
   connection.close()
   if body is not None:
     return {
