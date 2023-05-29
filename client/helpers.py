@@ -2,26 +2,41 @@ import base64
 import requests 
 import tempfile
 import os
+from configparser import ConfigParser
 
-def send_stego_post(message_bytes, medium_image, coder, resource, auth_token):
+def get_api_url():
+    parser = ConfigParser()
+    parser.read("config.ini")
+    return parser.get("api", "host")
+
+def send_stego_post(message_bytes, medium_image, coder, resource, auth_token, post=True):
   # Encode message in image 
-  out_fname = tempfile.NamedTemporaryFile().name + ".png"
-  if not coder.encode(message_bytes, medium_image, out_fname):
-    print("[ERROR] Failed to encode message")
-    return None
-  
-  body = None
-  with open(out_fname, "rb") as fp:
-    body = fp.read()
-  os.remove(out_fname)
+  resp = None
+  if post:
+    out_fname = tempfile.NamedTemporaryFile().name + ".png"
+    if not coder.encode(message_bytes, medium_image, out_fname):
+        print("[ERROR] Failed to encode message")
+        return None
+    
+    body = None
+    with open(out_fname, "rb") as fp:
+        body = fp.read()
+    os.remove(out_fname)
 
-  # Send post request to resource
-  resp = requests.post(
-    url=resource,
-    data=body,
-    headers={'authorization': auth_token},
-    stream=True
-  )
+    # Send post request to resource
+    resp = requests.post(
+        url=resource,
+        data=body,
+        headers={'authorization': auth_token},
+        stream=True
+    )
+  else:
+    resp = requests.get(
+        url=resource,
+        headers={'authorization': auth_token},
+        stream=True
+    )
+
   if resp.status_code != 200:
     print("[ERROR STATUS]", resp.status_code)
     print("[ERROR MESSAGE]", resp.json())

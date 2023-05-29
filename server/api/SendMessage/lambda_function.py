@@ -71,7 +71,6 @@ def lambda_handler(event, context):
         response["body"] = '{"error": "Failed to retrieve messages"}' 
     
     # Commit transaction
-    connection.commit()
     connection.close()
     return response
 

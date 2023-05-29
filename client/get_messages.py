@@ -8,7 +8,7 @@ if __name__ == "__main__":
   in_fname = sys.argv[1]
   new_messages = (sys.argv[2] != "all")
   cognito_token = sys.argv[3]
-  resource = "https://91c4xsiu5h.execute-api.us-west-2.amazonaws.com/get_messages"
+  resource = get_api_url() + "/get_messages"
 
   # Encode message in image 
   coder = StegoTranscoder()

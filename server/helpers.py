@@ -63,8 +63,7 @@ def get_last_read_message_number(cursor, username):
     return row[0]
   return None
 
-def get_messages(cursor, username, intake_n):
-  # Get chat memberships
+def get_chat_memberships(cursor, username):
   query = "SELECT chat_id FROM chat_participants WHERE account_id = %s"
   cursor.execute(query, (username,))
   chat_ids = []
@@ -72,7 +71,13 @@ def get_messages(cursor, username, intake_n):
   while row is not None:
     chat_ids.append(row[0])
     row = cursor.fetchone()
+  return chat_ids
 
+
+def get_messages(cursor, username, intake_n):
+  # Get chat memberships
+  chat_ids = get_chat_memberships(cursor, username)
+  
   # Get messages
   query = "SELECT account_id, intake_order, content FROM messages WHERE chat_id = %s AND intake_order > %s"
   messages = {}
@@ -100,3 +105,43 @@ def get_messages(cursor, username, intake_n):
   if response is None or response[0] != username:
     print("[ERROR] Failed to update last message read order number")
   return messages
+
+def does_user_exist(cursor, username):
+    query = "SELECT account_id FROM chat_participants WHERE account_id = %s" 
+    cursor.execute(query, (username, ))
+    row = cursor.fetchone()
+    if row is not None and row[0] == username:
+        return True
+    return False
+
+def does_chat_exist(cursor, chat_id):
+    query = "SELECT chat_id FROM chat WHERE chat_id = %s"
+    cursor.execute(query, (chat_id,))
+    row = cursor.fetchone()
+    if row is not None and row[0] == chat_id:
+        return True
+    return False
+
+def create_chat(cursor, name):
+    query = "INSERT INTO chat (chat_name) VALUES (%s) RETURNING id"
+    cursor.execute(query, (name,))
+    row = cursor.fetchone()
+    if row is not None:
+        return row[0]
+    return None
+
+def join_chat(cursor, chat_id, account_id):
+    query = "INSERT INTO chat_participants (account_id, chat_id) VALUES (%s, %s) RETURNING account_id"
+    cursor.execute(query, (account_id, chat_id))
+    row = cursor.fetchone()
+    if row is not None and row[0] == account_id:
+        return True
+    return False
+
+def leave_chat(cursor, chat_id, account_id):
+    query = "DELETE FROM chat_participants WHERE account_id = %s AND chat_id = %s RETURNING account_id"
+    cursor.execute(query, (account_id, chat_id))
+    row = cursor.fetchone()
+    if row is not None and row[0] == account_id:
+        return True
+    return False
