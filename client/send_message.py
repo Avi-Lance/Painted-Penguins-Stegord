@@ -6,16 +6,17 @@ from stego import StegoTranscoder
 if __name__ == "__main__":
   # Read parameters
   in_fname = sys.argv[1]
-  new_messages = (sys.argv[2] != "all")
-  cognito_token = sys.argv[3]
-  resource = "https://91c4xsiu5h.execute-api.us-west-2.amazonaws.com/get_messages"
+  chat_id = sys.argv[2]
+  message = sys.argv[3]
+  cognito_token = sys.argv[4]
+  resource = "https://91c4xsiu5h.execute-api.us-west-2.amazonaws.com/send_message"
 
   # Encode message in image 
   coder = StegoTranscoder()
-  message = json.dumps({"new": new_messages}).encode("utf-8")
+  message = json.dumps({"chat_id": chat_id, "message": message}).encode("utf-8")
   response = send_stego_post(message, in_fname, coder, resource, cognito_token)
   if response is None: 
     sys.exit(1)
   print(response)
   
-  
+ 
