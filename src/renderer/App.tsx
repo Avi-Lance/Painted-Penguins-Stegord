@@ -1,6 +1,7 @@
 import './App.css';
+import { BrowserRouter } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
-import ProfileSettings from './components/ProfileSettings';
+
 // Uncomment for backend
 /*
 import { Amplify } from 'aws-amplify';
@@ -27,8 +28,8 @@ export default function App() {
 // Comment this when using backend
 export default function App() {
   return (
-    <Dashboard>
-      <ProfileSettings username="Username" bio="Sample bio" />
-    </Dashboard>
+    <BrowserRouter>
+      <Dashboard />
+    </BrowserRouter>
   );
 }

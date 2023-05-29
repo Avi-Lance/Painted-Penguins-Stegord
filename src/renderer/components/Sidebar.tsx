@@ -1,37 +1,31 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import type { MenuProps } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const { Sider } = Layout;
 
-type MenuItem = Required<MenuProps>['items'][number];
-
-function getItem(
-  label: React.ReactNode,
-  key?: React.Key | null,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-  type?: 'group'
-): MenuItem {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-  } as MenuItem;
-}
-
-const items: MenuItem[] = [
-  getItem('Chat', '1'),
-  getItem('Find Friends', '2'),
-  getItem('My Profile', '3'),
-];
-
 export default function Sidebar() {
+  const navigate = useNavigate();
+
   return (
     <Sider>
-      <Menu theme="dark" mode="inline" items={items} />
+      <Menu
+        theme="dark"
+        mode="inline"
+        onClick={({ key }) => {
+          if (key === 'signout') {
+            // DO SIGNOUT HERE
+          } else {
+            navigate(key);
+          }
+        }}
+        items={[
+          { label: 'Chat', key: '/chat' },
+          { label: 'Find Friends', key: '/find_friends' },
+          { label: 'My Profile', key: '/my_profile' },
+          { label: 'Sign Out', key: 'signout' },
+        ]}
+      />
     </Sider>
   );
 }
