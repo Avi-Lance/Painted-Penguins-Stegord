@@ -3,5 +3,57 @@
 }
 
 .body_page {
+  height: 100vh;
   padding: 24px;
+}
+
+.chat_body {
+  height: 80%;
+  overflow-y:scroll;
+}
+
+.message_body {
+  display: grid;
+}
+
+.message {
+  display: flex;
+  max-width: 60%;
+  margin-bottom: 12px;;
+  justify-content: space-between;
+}
+
+.message_you {
+  justify-self: right;
+}
+
+.message_other {
+  justify-self: flex-start;
+}
+
+.message_meta {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.message_text {
+  text-align: left;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.message_you > .message_text {
+  background-color: lightblue;
+}
+
+.message_other > .message_text {
+  background-color: lightgreen;
+}
+
+.message_create {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10%;
 }
