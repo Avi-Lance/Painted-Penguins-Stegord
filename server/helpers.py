@@ -107,7 +107,7 @@ def get_messages(cursor, username, intake_n):
   return messages
 
 def does_user_exist(cursor, username):
-    query = "SELECT account_id FROM chat_participants WHERE account_id = %s" 
+    query = "SELECT id FROM account WHERE id = %s" 
     cursor.execute(query, (username, ))
     row = cursor.fetchone()
     if row is not None and row[0] == username:
