@@ -1,6 +1,8 @@
 import './App.css';
 import Dashboard from './components/Dashboard';
-
+import ProfileSettings from './components/ProfileSettings';
+// Uncomment for backend
+/*
 import { Amplify } from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';
 import awsExports from '../aws-exports';
@@ -19,5 +21,14 @@ export default function App() {
         </Dashboard>
       )}
     </Authenticator>
+  );
+}
+*/
+// Comment this when using backend
+export default function App() {
+  return (
+    <Dashboard>
+      <ProfileSettings username="Username" bio="Sample bio" />
+    </Dashboard>
   );
 }

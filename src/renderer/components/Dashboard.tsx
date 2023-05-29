@@ -9,9 +9,7 @@ export default function Dashboard({ children }) {
     <Layout className="body_dashboard">
       <Sidebar />
       <Content>
-        <div className="body_page">
-          { children }
-        </div>
+        <div className="body_page">{children}</div>
       </Content>
     </Layout>
   );
