@@ -11,7 +11,7 @@ cp config.ini $working_dir
 cp image.png $working_dir
 pip3 install -r requirements.txt --target $working_dir 
 
-# Create lambda zips
+# Create api lambda zips
 for name in "${api_endpoints[@]}"; do
     zip_name="$name".zip
     cp ./api/$name/lambda_function.py $working_dir
@@ -22,6 +22,12 @@ for name in "${api_endpoints[@]}"; do
 
     rm $working_dir/lambda_function.py
 done
+
+# Create cognito trigger lambda zip
+cp ./cognito/PostSignUpTrigger/lambda_function.py $working_dir
+cd $working_dir
+zip -r ../CognitoSignUpTrigger.zip *
+cd ../..
 
 # Cleanup
 rm -r $working_dir
