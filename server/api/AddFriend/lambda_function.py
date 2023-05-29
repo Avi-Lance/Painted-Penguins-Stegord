@@ -5,6 +5,10 @@ def add_friend(cursor, user_one, user_two):
     chat_id = create_chat(cursor, user_one + "/" + user_two)
     if chat_id is None:
         return None
+
+    # Add both users to chat
+    if not join_chat(cursor, chat_id, user_one) or not join_chat(cursor, chat_id, user_two):
+        return None
     
     # Create friendship
     query = "INSERT INTO friends (account_one, account_two, chat_id) VALUES (%s, %s, %s) RETURNING account_one"

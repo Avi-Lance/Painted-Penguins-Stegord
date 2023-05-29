@@ -24,7 +24,7 @@ def lambda_handler(event, context):
 
     # Ensure user is in chat
     print("Checking user status...")
-    if not does_user_exist(cursor, username):;
+    if not does_user_exist(cursor, username):
         cursor.close()
         connection.close()
         return {

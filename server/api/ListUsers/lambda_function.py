@@ -7,7 +7,7 @@ def lambda_handler(event, context):
     cursor = connection.cursor()
 
     # Query for users and bios
-    query = "SELECT (id, bio) FROM account"
+    query = "SELECT id, bio FROM account"
     cursor.execute(query)
 
     # Fetch information

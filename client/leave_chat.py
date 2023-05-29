@@ -6,7 +6,7 @@ from stego import StegoTranscoder
 if __name__ == "__main__":
   # Read parameters
   in_fname = sys.argv[1]
-  chat_id = sys.argv[2]
+  chat_id = int(sys.argv[2])
   cognito_token = sys.argv[3]
   resource = get_api_url() + "/leave_chat"
 

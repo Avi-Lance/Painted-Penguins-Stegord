@@ -26,7 +26,7 @@ def lambda_handler(event, context):
 
     # Join chat 
     print("Joining chat...")
-    if not join_chat(cursor, chat_id, username)
+    if not join_chat(cursor, chat_id, username):
         cursor.close()
         connection.close()
         return {

@@ -1,12 +1,12 @@
 from helpers import *
 
 def lambda_handler(event, context):
-    # Read message + chat_id
+    # Read message + chat_name
     print("Extracting info...")
     coder = StegoTranscoder()
     request = load_stego_body(event, coder)
 
-    chat_id = request["chat_id"]
+    chat_name = request["chat_name"]
     username = extract_username(event)
 
     # Establish Connection
@@ -14,30 +14,30 @@ def lambda_handler(event, context):
     connection = get_connection()
     cursor = connection.cursor()
 
-    # Ensure chat exists 
-    print("Checking chat status...")
-    if not does_chat_exist(cursor, chat_id):
+    # Create chat 
+    print("Creating chat...")
+    chat_id = create_chat(cursor, chat_name)
+    if chat_id is None: 
         cursor.close()
         connection.close()
         return {
             "statusCode": 500,
-            "body": '{"error": "Chat does not exist"}'
+            "body": '{"error": "Failed to create chat"}'
         }
-
-    # Leave chat 
-    print("Leave chat...")
-    if not leave_chat(cursor, chat_id, username):
+    
+    # Join chat
+    if not join_chat(cursor, chat_id, username):
         cursor.close()
         connection.close()
         return {
             "statusCode": 500,
-            "body": '{"error": "Failed to leave chat"}'
+            "body": '{"error": "Failed to join chat"}'
         }
     cursor.close()
     
     # Return response 
     print("Responding...")
-    message_bytes = json.dumps({"success": True}).encode("utf-8")
+    message_bytes = json.dumps({"chat_id": chat_id}).encode("utf-8")
     body = create_stego_response(message_bytes, coder)
     response = {"statusCode": 200, "body": None}
 

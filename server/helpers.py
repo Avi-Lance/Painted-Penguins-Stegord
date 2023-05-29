@@ -115,9 +115,11 @@ def does_user_exist(cursor, username):
     return False
 
 def does_chat_exist(cursor, chat_id):
-    query = "SELECT chat_id FROM chat WHERE chat_id = %s"
+    query = "SELECT id FROM chat WHERE id = %s"
     cursor.execute(query, (chat_id,))
     row = cursor.fetchone()
+    print("Given ID: ", chat_id)
+    print("Row: ", row)
     if row is not None and row[0] == chat_id:
         return True
     return False

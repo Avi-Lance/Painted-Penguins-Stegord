@@ -1,4 +1,5 @@
 from helpers import *
+from stego import StegoTranscoder
 
 def list_chats(cursor, username):
     response = {
@@ -7,7 +8,7 @@ def list_chats(cursor, username):
     }
 
     # Get chat memberships
-    chat_ids = get_chat_memberships()
+    chat_ids = get_chat_memberships(cursor, username)
 
     # Get chat names
     query = "SELECT chat_name FROM chat WHERE id = %s"
@@ -57,6 +58,7 @@ def lambda_handler(event, context):
 
     # Return response 
     print("Responding...")
+    coder = StegoTranscoder()
     message_bytes = json.dumps(chats).encode("utf-8")
     body = create_stego_response(message_bytes, coder)
     response = {"statusCode": 200, "body": None}
