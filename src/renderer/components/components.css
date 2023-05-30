@@ -19,7 +19,7 @@
 .message {
   display: flex;
   max-width: 60%;
-  margin-bottom: 12px;;
+  margin-bottom: 12px;
   justify-content: space-between;
 }
 
@@ -56,4 +56,27 @@
   justify-content: center;
   align-items: center;
   height: 10%;
+}
+
+.friend_list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+}
+
+.user_list_item {
+  display: flex;
+  background-color: white;
+  border-color: grey;
+  border-style: solid;
+  border-width: 1px;
+  width: 40%;
+  height: 32px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 4px;
 }

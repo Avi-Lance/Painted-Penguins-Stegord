@@ -1,5 +1,5 @@
 import Message from './Message';
-import { Button, Input, Select, Space } from 'antd';
+import { Button, Input } from 'antd';
 
 export default function Chat() {
   return (
