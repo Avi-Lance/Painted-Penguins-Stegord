@@ -1,4 +1,4 @@
-import tempfile  
+import tempfile
 import base64
 import jwt
 import os
@@ -10,10 +10,12 @@ from stego import StegoTranscoder
 MEDIUM_IMAGE_NAME = "image.png"
 
 def extract_username(event):
+  """
   token = event["headers"]["authorization"]
   decoded = jwt.decode(token, options={"verify_signature": False})
   return decoded["cognito:username"]
-  #return event["headers"]["authorization"]
+  """
+  return event["headers"]["Authorization"]
 
 def get_connection():
   parser = ConfigParser()
@@ -75,7 +77,7 @@ def get_chat_memberships(cursor, username):
 def get_messages(cursor, username, intake_n):
   # Get chat memberships
   chat_ids = get_chat_memberships(cursor, username)
-  
+
   # Get messages
   query = "SELECT account_id, intake_order, content FROM messages WHERE chat_id = %s AND intake_order > %s"
   messages = {}
@@ -105,7 +107,7 @@ def get_messages(cursor, username, intake_n):
   return messages
 
 def does_user_exist(cursor, username):
-    query = "SELECT id FROM account WHERE id = %s" 
+    query = "SELECT id FROM account WHERE id = %s"
     cursor.execute(query, (username, ))
     row = cursor.fetchone()
     if row is not None and row[0] == username:

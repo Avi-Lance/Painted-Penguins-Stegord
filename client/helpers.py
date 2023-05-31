@@ -1,5 +1,5 @@
 import base64
-import requests 
+import requests
 import tempfile
 import os
 from configparser import ConfigParser
@@ -10,36 +10,36 @@ def get_api_url():
     return parser.get("api", "host")
 
 def send_stego_post(message_bytes, medium_image, coder, resource, auth_token, post=True):
-  # Encode message in image 
+  # Encode message in image
   resp = None
   if post:
     out_fname = tempfile.NamedTemporaryFile().name + ".png"
     if not coder.encode(message_bytes, medium_image, out_fname):
         print("[ERROR] Failed to encode message")
         return None
-    
+
     body = None
     with open(out_fname, "rb") as fp:
-        body = fp.read()
+        body = base64.b64encode(fp.read()).decode("utf-8")
     os.remove(out_fname)
 
     # Send post request to resource
     resp = requests.post(
         url=resource,
         data=body,
-        headers={'authorization': auth_token},
+        headers={'Authorization': auth_token},
         stream=True
     )
   else:
     resp = requests.get(
         url=resource,
-        headers={'authorization': auth_token},
+        headers={'Authorization': auth_token},
         stream=True
     )
 
   if resp.status_code != 200:
     print("[ERROR STATUS]", resp.status_code)
-    print("[ERROR MESSAGE]", resp.json())
+    print("[ERROR MESSAGE]", resp.content.decode("utf-8"))
     return None
 
   # Read bytes object from reponse
