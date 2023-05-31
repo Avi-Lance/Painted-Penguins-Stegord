@@ -4,6 +4,7 @@ working_dir="$build_dir/working"
 api_endpoints=("AddFriend" "JoinChat" "CreateChat" "LeaveChat" "ListChats" "ListUsers" "ReceiveMessages" "SendMessage" "SetBio")
 
 # Setup zip environment
+mkdir $build_dir
 mkdir $working_dir 
 cp stego.py $working_dir
 cp helpers.py $working_dir
