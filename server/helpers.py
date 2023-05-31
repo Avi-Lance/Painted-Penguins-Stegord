@@ -10,12 +10,10 @@ from stego import StegoTranscoder
 MEDIUM_IMAGE_NAME = "image.png"
 
 def extract_username(event):
-  """
   token = event["headers"]["authorization"]
   decoded = jwt.decode(token, options={"verify_signature": False})
   return decoded["cognito:username"]
-  """
-  return event["headers"]["authorization"]
+  #return event["headers"]["authorization"]
 
 def get_connection():
   parser = ConfigParser()
