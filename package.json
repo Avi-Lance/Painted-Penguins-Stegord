@@ -179,7 +179,9 @@
     "productName": "ElectronReact",
     "appId": "org.erb.ElectronReact",
     "asar": true,
-    "asarUnpack": "**\\*.{node,dll}",
+    "asarUnpack": [
+      "**\\*.{node,dll}"
+    ],
     "files": [
       "dist",
       "node_modules",
@@ -231,7 +233,8 @@
       "output": "release/build"
     },
     "extraResources": [
-      "./assets/**"
+      "./assets/**",
+      "./client/**"
     ],
     "publish": {
       "provider": "github",
