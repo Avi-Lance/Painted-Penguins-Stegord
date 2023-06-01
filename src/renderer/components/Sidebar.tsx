@@ -1,7 +1,19 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { Amplify, Auth } from 'aws-amplify';
+import '@aws-amplify/ui-react/styles.css';
+import awsExports from '../../aws-exports';
+import { Authenticator } from '@aws-amplify/ui-react';
 
+Amplify.configure(awsExports);
+const handleSignOut = async () => {
+  try {
+    await Auth.signOut();
+  } catch (error) {
+    console.log("Error signing out:", error);
+  }
+};
 const { Sider } = Layout;
 
 export default function Sidebar() {
@@ -14,7 +26,7 @@ export default function Sidebar() {
         mode="inline"
         onClick={({ key }) => {
           if (key === 'signout') {
-            // DO SIGNOUT HERE
+            handleSignOut();
           } else {
             navigate(key);
           }
