@@ -14,6 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import BackendManager from './manager';
 
 class AppUpdater {
   constructor() {
@@ -24,7 +25,7 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
-
+let Backend: BackendManager | null = null;
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
@@ -35,6 +36,17 @@ if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
 }
+ipcMain.on('configureBackend', async (event, data) => {
+  const args = data.args;
+  if (process.env.NODE_ENV === 'production') {
+    const currentDirectory = app.getAppPath();
+    Backend = new BackendManager(
+      args.username,
+      currentDirectory + 'image.png',
+      currentDirectory + 'python_clis/'
+    );
+  }
+});
 
 const isDebug =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
