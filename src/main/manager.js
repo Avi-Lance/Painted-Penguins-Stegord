@@ -1,10 +1,10 @@
 const { spawn } = require('child_process');
 
 module.exports = class BackendManager {
-  constructor(cognitoToken, mediumImage, exe_dir) {
+  constructor(cognitoToken, mediumImage, currentDir) {
     this.token = cognitoToken;
     this.image = mediumImage;
-    this.dir = exe_dir;
+    this.dir = currentDir;
   }
 
   setToken(cognitoToken) {
@@ -19,7 +19,8 @@ module.exports = class BackendManager {
     }
 
     // Spawn child process
-    var command = spawn(this.dir + 'get_messages', [
+    var command = spawn('python3', [
+      dir + 'get_messages.py',
       this.image,
       breadth,
       this.token,
@@ -28,7 +29,8 @@ module.exports = class BackendManager {
   }
 
   sendMessage(chatId, message) {
-    var command = spawn(this.dir + 'send_message', [
+    var command = spawn('python3', [
+      dir + 'send_message.py',
       this.image,
       chatId,
       message,
@@ -38,22 +40,28 @@ module.exports = class BackendManager {
   }
 
   setBio(bio) {
-    var command = spawn(this.dir + 'set_bio', [this.image, bio, this.token]);
+    var command = spawn('python3', [
+      dir + 'set_bio.py',
+      this.image,
+      bio,
+      this.token,
+    ]);
     return this.createCommandPromise(command);
   }
 
   listUsers() {
-    var command = spawn(this.dir + 'list_users', [this.token]);
+    var command = spawn('python3', [dir + 'list_users.py', this.token]);
     return this.createCommandPromise(command);
   }
 
   listChats() {
-    var command = spawn(this.dir + 'list_chats', [this.token]);
+    var command = spawn('python3', [dir + 'list_chats.py', this.token]);
     return this.createCommandPromise(command);
   }
 
   leaveChat(chatId) {
-    var command = spawn(this.dir + 'leave_chat', [
+    var command = spawn('python3', [
+      dir + 'leave_chat.py',
       this.image,
       chatId,
       this.token,
@@ -62,7 +70,8 @@ module.exports = class BackendManager {
   }
 
   joinChat(chatId) {
-    var command = spawn(this.dir + 'join_chat', [
+    var command = spawn('python3', [
+      dir + 'join_chat.py',
       this.image,
       chatId,
       this.token,
@@ -71,7 +80,8 @@ module.exports = class BackendManager {
   }
 
   createChat(chatName) {
-    var command = spawn(this.dir + 'create_chat', [
+    var command = spawn('python3', [
+      dir + 'create_chat.py',
       this.image,
       chatName,
       this.token,
@@ -80,7 +90,8 @@ module.exports = class BackendManager {
   }
 
   addFriend(friendName) {
-    var command = spawn(this.dir + 'add_friend', [
+    var command = spawn('python3', [
+      dir + 'add_friend.py',
       this.image,
       friendName,
       this.token,

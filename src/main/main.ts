@@ -40,10 +40,11 @@ ipcMain.on('configureBackend', async (event, data) => {
   const args = data.args;
   if (process.env.NODE_ENV === 'production') {
     const currentDirectory = app.getAppPath();
+    const resources = currentDirectory + '/client/';
     Backend = new BackendManager(
       args.username,
-      currentDirectory + 'image.png',
-      currentDirectory + 'python_clis/'
+      resources + 'image.png',
+      resources
     );
   }
 });
