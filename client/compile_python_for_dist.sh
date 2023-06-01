@@ -14,5 +14,5 @@ python_clis=("add_friend.py" "create_chat.py" "get_messages.py" "join_chat.py"  
 for cli in "${python_clis[@]}"; do
 
     # Use PyInstaller to create a standalone executable of the Python file
-    pyinstaller "$INPUT_DIR_PATH/$cli" --onefile -y --distpath "$OUTPUT_DIR"
+    pyinstaller "$INPUT_DIR_PATH/$cli" --add-data "config.ini:." --onefile -y --distpath "$OUTPUT_DIR"
 done
