@@ -11,6 +11,19 @@ module.exports = class BackendManager {
     this.token = cognitoToken;
   }
 
+  /*
+  {
+    "<chat id 1>": [
+      {"sender": string, "order_num": int, "message": string},
+      ...
+    ],
+    ...
+    "<chat id n>": [
+      {"sender": string, "order_num": int, "message": string},
+      ...
+    ]
+  }
+  */
   getMessages(justNew) {
     // Decide message breadth parameter
     var breadth = 'all';
@@ -28,6 +41,11 @@ module.exports = class BackendManager {
     return this.createCommandPromise(command);
   }
 
+  /*
+  returns the same thing as getMessages,
+  grabbing all new messages,
+  including the one just sent
+  */
   sendMessage(chatId, message) {
     var command = spawn('python3', [
       dir + 'send_message.py',
@@ -39,6 +57,12 @@ module.exports = class BackendManager {
     return this.createCommandPromise(command);
   }
 
+  /*
+  returns:
+    {"success": true}
+  else:
+    {"error": message}
+  */
   setBio(bio) {
     var command = spawn('python3', [
       dir + 'set_bio.py',
@@ -49,16 +73,40 @@ module.exports = class BackendManager {
     return this.createCommandPromise(command);
   }
 
+  /*
+  {
+    "<username 1>": <bio>,
+    ...,
+    "<username n>": <bio>
+  }
+  */
   listUsers() {
     var command = spawn('python3', [dir + 'list_users.py', this.token]);
     return this.createCommandPromise(command);
   }
 
+  /*
+  {
+    "friends": {
+      "<chat id>": "<username>"
+    },
+    "groups": {
+      "<chat id>": "<chat name>",
+      ...
+    }
+  }
+  */
   listChats() {
     var command = spawn('python3', [dir + 'list_chats.py', this.token]);
     return this.createCommandPromise(command);
   }
 
+  /*
+  returns:
+    {"success": true}
+  else:
+    {"error": message}
+  */
   leaveChat(chatId) {
     var command = spawn('python3', [
       dir + 'leave_chat.py',
@@ -69,6 +117,12 @@ module.exports = class BackendManager {
     return this.createCommandPromise(command);
   }
 
+  /*
+  returns:
+    {"success": true}
+  else:
+    {"error": message}
+  */
   joinChat(chatId) {
     var command = spawn('python3', [
       dir + 'join_chat.py',
@@ -79,6 +133,9 @@ module.exports = class BackendManager {
     return this.createCommandPromise(command);
   }
 
+  /*
+  {"chat_id": int}
+  */
   createChat(chatName) {
     var command = spawn('python3', [
       dir + 'create_chat.py',
@@ -89,6 +146,9 @@ module.exports = class BackendManager {
     return this.createCommandPromise(command);
   }
 
+  /*
+  {"chat_id": int}
+  */
   addFriend(friendName) {
     var command = spawn('python3', [
       dir + 'add_friend.py',
