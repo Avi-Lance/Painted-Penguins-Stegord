@@ -14,16 +14,14 @@ Amplify.configure(awsExports);
 export default function App() {
   return (
     <Authenticator>
-      {({ signOut, user }) => (
-          <main>
-            <BrowserRouter>
-              <Dashboard />
-            </BrowserRouter>
-
-         </main>
+      {({ user }) => (
+        <main>
+          <BrowserRouter>
+            <Dashboard />
+          </BrowserRouter>
+        </main>
       )}
     </Authenticator>
-
   );
 }
 
