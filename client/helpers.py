@@ -5,9 +5,7 @@ import os
 from configparser import ConfigParser
 
 def get_api_url():
-    parser = ConfigParser()
-    parser.read("config.ini")
-    return parser.get("api", "host")
+    return "https://m7sie9te7j.execute-api.us-west-2.amazonaws.com/prod/"
 
 def send_stego_post(message_bytes, medium_image, coder, resource, auth_token, post=True):
   # Encode message in image
