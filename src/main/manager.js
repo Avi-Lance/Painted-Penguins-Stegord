@@ -7,6 +7,10 @@ module.exports = class BackendManager {
     this.dir = currentDir;
   }
 
+  /*
+  cognitoToken is the account user name for now.
+  In the future it will be the extracted cognito user token
+  */
   setToken(cognitoToken) {
     this.token = cognitoToken;
   }
