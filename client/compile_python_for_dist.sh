@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Make sure this script is in the folder with all the python scripts
+#Make sure this script is ran in the folder with all the python scripts
 
 #Get the path of the script
 SCRIPT_PATH="\$0"
