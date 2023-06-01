@@ -234,7 +234,7 @@
     },
     "extraResources": [
       "./assets/**",
-      "./client/**"
+      "./src/main/python_clis/**"
     ],
     "publish": {
       "provider": "github",

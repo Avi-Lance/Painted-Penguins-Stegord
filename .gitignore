@@ -55,3 +55,6 @@ amplifytools.xcconfig
 
 # lambda configs
 config.ini
+
+# These clis are os dependent for now
+src/main/python_clis
