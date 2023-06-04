@@ -2,7 +2,7 @@ from helpers import *
 
 def lambda_handler(event, context):
     # Get username parameter
-    username = event["userName"]
+    username = event["Username"]
 
     # Check if username exists 
     connection = get_connection()
