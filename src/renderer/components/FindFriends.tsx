@@ -1,23 +1,20 @@
-import { Input } from 'antd';
-import User from './User'
-
-const { Search } = Input;
-
-const onSearch = (value: string) => console.log(value);
+import { useState } from 'react';
+import User from './User';
 
 export default function FindFriends() {
+  const [users, setUsers] = useState({'Loading Users...' : 'temporary'});
+
+  window.electron.ipcRenderer.sendMessage('listUsers', [null]);
+
+  window.electron.ipcRenderer.on('listUsers', async (event, arg) => {
+    setUsers(event);
+  });
+
   return (
-    <>
-      <Search placeholder="Search for Friends" onSearch={onSearch} enterButton />
-      <div className="friend_list">
-        <User name="John Doe" />
-        <User name="John Doe" />
-        <User name="John Doe" />
-        <User name="John Doe" />
-        <User name="John Doe" />
-        <User name="John Doe" />
-        <User name="John Doe" />
-      </div>
-    </>
+    <div className="friend_list">
+      {Object.keys(users).map((user) => {
+        return <User name={user} />;
+      })}
+    </div>
   );
 }

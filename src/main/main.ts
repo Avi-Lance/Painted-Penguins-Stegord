@@ -32,21 +32,27 @@ ipcMain.on('ipc-example', async (event, arg) => {
   event.reply('ipc-example', msgTemplate('pong'));
 });
 
+ipcMain.on('listUsers', async (event, arg) => {
+  Backend?.listUsers().then((response) => {
+    event.reply('listUsers', response);
+  });
+});
+
+ipcMain.on('addFriend', async (event, arg) => {
+  console.log(arg);
+  Backend?.addFriend(arg);
+});
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
 }
 ipcMain.on('configureBackend', async (event, data) => {
-  const args = data.args;
-  if (process.env.NODE_ENV === 'production') {
-    const currentDirectory = app.getAppPath();
-    const resources = currentDirectory + '/client/';
-    Backend = new BackendManager(
-      args.username,
-      resources + 'image.png',
-      resources
-    );
-  }
+  // if (process.env.NODE_ENV === 'production') {
+  const currentDirectory = app.getAppPath();
+  const resources = `${currentDirectory}/src/main/client/`;
+  Backend = new BackendManager(data, `${resources}image.png`, resources);
+  // }
 });
 
 const isDebug =

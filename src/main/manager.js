@@ -85,7 +85,7 @@ module.exports = class BackendManager {
   }
   */
   listUsers() {
-    var command = spawn('python3', [dir + 'list_users.py', this.token]);
+    var command = spawn('python3', [this.dir + 'list_users.py', this.token]);
     return this.createCommandPromise(command);
   }
 
@@ -101,7 +101,7 @@ module.exports = class BackendManager {
   }
   */
   listChats() {
-    var command = spawn('python3', [dir + 'list_chats.py', this.token]);
+    var command = spawn('python3', [this.dir + 'list_chats.py', this.token]);
     return this.createCommandPromise(command);
   }
 
@@ -155,7 +155,7 @@ module.exports = class BackendManager {
   */
   addFriend(friendName) {
     var command = spawn('python3', [
-      dir + 'add_friend.py',
+      this.dir + 'add_friend.py',
       this.image,
       friendName,
       this.token,
@@ -167,7 +167,9 @@ module.exports = class BackendManager {
     return new Promise((resolve, reject) => {
       try {
         command.stdout.on('data', (data) => {
-          resolve(JSON.parse(data.toString()));
+          try {
+            resolve(JSON.parse(data.toString()));
+          } catch (e) {}
         });
         command.on('error', (err) => {
           throw new Error(err.message);
