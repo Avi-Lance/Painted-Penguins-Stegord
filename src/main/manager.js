@@ -37,7 +37,7 @@ module.exports = class BackendManager {
 
     // Spawn child process
     var command = spawn('python3', [
-      dir + 'get_messages.py',
+      this.dir + 'get_messages.py',
       this.image,
       breadth,
       this.token,
@@ -52,7 +52,7 @@ module.exports = class BackendManager {
   */
   sendMessage(chatId, message) {
     var command = spawn('python3', [
-      dir + 'send_message.py',
+      this.dir + 'send_message.py',
       this.image,
       chatId,
       message,
@@ -113,7 +113,7 @@ module.exports = class BackendManager {
   */
   leaveChat(chatId) {
     var command = spawn('python3', [
-      dir + 'leave_chat.py',
+      this.dir + 'leave_chat.py',
       this.image,
       chatId,
       this.token,
@@ -129,7 +129,7 @@ module.exports = class BackendManager {
   */
   joinChat(chatId) {
     var command = spawn('python3', [
-      dir + 'join_chat.py',
+      this.dir + 'join_chat.py',
       this.image,
       chatId,
       this.token,
@@ -142,7 +142,7 @@ module.exports = class BackendManager {
   */
   createChat(chatName) {
     var command = spawn('python3', [
-      dir + 'create_chat.py',
+      this.dir + 'create_chat.py',
       this.image,
       chatName,
       this.token,
