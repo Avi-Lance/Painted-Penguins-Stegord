@@ -10,7 +10,7 @@ cp stego.py $working_dir
 cp helpers.py $working_dir
 cp config.ini $working_dir
 cp image.png $working_dir
-pip3 install -r requirements.txt --target $working_dir 
+python3.10 -m pip install -r requirements.txt --target $working_dir 
 
 # Create api lambda zips
 for name in "${api_endpoints[@]}"; do
