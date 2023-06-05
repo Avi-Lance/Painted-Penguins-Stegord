@@ -8,7 +8,7 @@ const UserOutlinedIcon = UserOutlined as React.ComponentType<any>;
 const { TextArea } = Input;
 
 interface ProfileSettingsProps {
-  username: string;
+  username: string | undefined;
   bio: string;
 }
 
@@ -24,12 +24,14 @@ export default function ProfileSettings({
 
   const changeBio = (event) => {
     setUserBio(event.target.value);
+    submitBio(event.target.value);
   };
+  console.log(username);
 
   return (
     <div>
       <Avatar size={128} icon={<UserOutlinedIcon />} />
-      <Title level={2}>{username}</Title>
+      <Title level={2}> {username}</Title>
       <Title level={5}>Bio</Title>
       <Form>
         <Form.Item>
