@@ -34,6 +34,7 @@ ipcMain.on('ipc-example', async (event, arg) => {
 
 ipcMain.on('listUsers', async (event, arg) => {
   Backend?.listUsers().then((response) => {
+    console.log(response);
     event.reply('listUsers', response);
   });
 });

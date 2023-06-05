@@ -10,6 +10,8 @@ export default function FindFriends() {
     setUsers(event);
   });
 
+  console.log(users);
+
   return (
     <div className="friend_list">
       {Object.keys(users).map((user) => {
