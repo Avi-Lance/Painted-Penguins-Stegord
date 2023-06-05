@@ -85,6 +85,7 @@ module.exports = class BackendManager {
   }
   */
   listUsers() {
+    console.log('I am activating the list users command!');
     var command = spawn('python3', [this.dir + 'list_users.py', this.token]);
     return this.createCommandPromise(command);
   }
