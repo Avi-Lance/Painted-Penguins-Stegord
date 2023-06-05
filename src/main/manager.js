@@ -1,4 +1,5 @@
 const { spawn } = require('child_process');
+const { promises } = require('dns');
 
 module.exports = class BackendManager {
   constructor(cognitoToken, mediumImage, currentDir) {
@@ -13,6 +14,9 @@ module.exports = class BackendManager {
   */
   setToken(cognitoToken) {
     this.token = cognitoToken;
+    return new Promise((resolve, reject) => {
+      resolve(true)
+    });
   }
 
   /*
@@ -92,8 +96,11 @@ module.exports = class BackendManager {
 
   getUserBio(username) {
     return this.listUsers().then((data) => {
-      if (data.has(username)) {
+      if (data.hasOwnProperty(username)) {
+        console.log(username)
+        console.log(data)
         return data[username];
+
       }
       return null;
     });

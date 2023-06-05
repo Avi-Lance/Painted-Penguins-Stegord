@@ -1,5 +1,5 @@
 import User from './User';
-import { useSelector } from 'react-redux';
+import { useState } from 'react';
 
 // Assuming the user slice state is defined as `UserState`
 interface UserState {
@@ -9,19 +9,14 @@ interface UserState {
 // Define the UserBioMap type
 type UserBioMap = Record<string, string>;
 
-export default function FindFriends() {
-  const userState = useSelector((state: { users: UserState }) => state.users);
-  console.log(userState);
-  if (!userState?.users) {
-    return <div>Loading...</div>;
-  }
+interface FriendsProps{
+  users: UserBioMap
+}
 
-  const users = userState?.users;
-  console.log(userState);
-
+export default function FindFriends(props: FriendsProps) {
   return (
     <div className="friend_list">
-      {Object.keys(users).map((user) => (
+      {Object.keys(props.users).map((user) => (
         <User key={user} name={user} />
       ))}
     </div>

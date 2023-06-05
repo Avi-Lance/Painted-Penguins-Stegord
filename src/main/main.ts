@@ -26,39 +26,36 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 let Backend: BackendManager | null = null;
-ipcMain.handle('ipc-example', async (event, arg) => {
+ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   return 'pong';
 });
 
 ipcMain.handle('listUsers', async (event, arg) => {
-  console.log('ListUsers is being called');
-  Backend?.listUsers().then((response) => {
-    console.log(response);
-    return response;
-  });
+  return Backend?.listUsers()
 });
 
 ipcMain.handle('addFriend', async (event, arg) => {
-  Backend?.addFriend(arg);
+  return Backend?.addFriend(arg);
 });
 
 ipcMain.handle('setBio', async (event, arg) => {
-  Backend?.setBio(arg);
+  return Backend?.setBio(arg);
 });
+
+ipcMain.handle('getUserBio', async (event, arg) => {
+  console.log(arg)
+  return Backend?.getUserBio(arg);
+});
+
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
 }
 ipcMain.handle('configureBackend', async (event, data) => {
-  // if (process.env.NODE_ENV === 'production') {
-  const currentDirectory = app.getAppPath();
-  const resources = `${currentDirectory}/src/main/client/`;
-  Backend = new BackendManager(data, `${resources}image.png`, resources);
-  console.log(Backend);
-  // }
+  return Backend?.setToken(data[0]);
 });
 
 const isDebug =
@@ -135,6 +132,10 @@ const createWindow = async () => {
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
+
+  const currentDirectory = app.getAppPath();
+  const resources = `${currentDirectory}/src/main/client/`;
+  Backend = new BackendManager(null, `${resources}image.png`, resources);
 };
 
 /**

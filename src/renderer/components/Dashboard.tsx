@@ -8,55 +8,55 @@ import Sidebar from './Sidebar';
 import ProfileSettings from './ProfileSettings';
 import Chat from './Chat';
 import FindFriends from './FindFriends';
-import { useSelector, useDispatch } from 'react-redux';
-import { setUsers } from '../../redux/usersSlice';
 
 const { Content } = Layout;
 
 type UserBioMap = Record<string, string>;
 
+
+
 // Define the UserBioMap type
 export default function Dashboard() {
-  const userState = useSelector((state: { users: UserBioMap }) => state.users);
-  const dispatch = useDispatch();
-
-  const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState({'name' : 'username'});
   const [user, setUser] = useState<AmplifyUser | null>(null);
+  const [bio, setBio] = useState<string>("N/A");
+
+
+  function listUsers(){
+    return window.electron.ipcRenderer.invoke('listUsers', [{}]).then(data => {
+      let users = JSON.parse(JSON.stringify(data))
+      setUsers(users)
+      return users
+    });
+  }
+
+  
+  function getUserBio(){
+    return window.electron.ipcRenderer.invoke('getUserBio', user?.username).then(data => {
+      setBio(data)
+      console.log(data)
+  });
+  }
+
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userdata = await Auth.currentUserInfo();
-        setUser(userdata);
+      Auth.currentUserInfo().then((userdata)=>{
+          window.electron.ipcRenderer.invoke(
+            'configureBackend',
+            [user?.username]
+          ).then(()=> {
+            return listUsers();
+          }).then((users)=> {
+            console.log(users)
+            console.log(userdata)
+            console.log(users[userdata?.username])
+            setBio(users[userdata?.username]);
+            setUser(JSON.parse(JSON.stringify(userdata)))
+          });
+  })}, []);
 
-        await window.electron.ipcRenderer.invoke(
-          'configureBackend',
-          userdata.username
-        );
-
-        const receivedUsers: UserBioMap =
-          await window.electron.ipcRenderer.invoke('listUsers', [{}]);
-
-        dispatch(setUsers(receivedUsers));
-      } catch (error) {
-        // Handle error
-        console.log('Error:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [dispatch]);
-
-  if (loading) {
-    return (
-      <div>
-        Fetching Stegographied Data. This may take a while, but will speed up
-        use.
-      </div>
-    );
-  }
+  
+    
 
   return (
     <Layout className="body_dashboard">
@@ -68,10 +68,10 @@ export default function Dashboard() {
             <Route
               path="/my_profile"
               element={
-                <ProfileSettings username={user?.username} bio="Sample bio" />
+                <ProfileSettings username={user?.username} bio={bio} />
               }
             />
-            <Route path="/find_friends" element={<FindFriends />} />
+            <Route path="/find_friends" element={<FindFriends users={users}/>} />
           </Routes>
         </div>
       </Content>
