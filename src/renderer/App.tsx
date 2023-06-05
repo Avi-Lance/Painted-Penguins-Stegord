@@ -11,14 +11,7 @@ import awsExports from '../aws-exports';
 
 Amplify.configure(awsExports);
 
-const userdata = await Auth.currentUserInfo();
-
 export default function App() {
-  window.electron.ipcRenderer.sendMessage(
-    'configureBackend',
-    userdata.username
-  );
-
   return (
     <Authenticator>
       {({ user }) => (
