@@ -89,6 +89,15 @@ module.exports = class BackendManager {
     return this.createCommandPromise(command);
   }
 
+  getUserBio(username) {
+    return this.listUsers().then((data) => {
+      if (data.has(username)) {
+        return data[username];
+      }
+      return null;
+    });
+  }
+
   /*
   {
     "friends": {
