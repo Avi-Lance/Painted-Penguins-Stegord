@@ -69,7 +69,7 @@ module.exports = class BackendManager {
   */
   setBio(bio) {
     var command = spawn('python3', [
-      dir + 'set_bio.py',
+      this.dir + 'set_bio.py',
       this.image,
       bio,
       this.token,

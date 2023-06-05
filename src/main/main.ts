@@ -39,8 +39,11 @@ ipcMain.on('listUsers', async (event, arg) => {
 });
 
 ipcMain.on('addFriend', async (event, arg) => {
-  console.log(arg);
   Backend?.addFriend(arg);
+});
+
+ipcMain.on('setBio', async (event, arg) => {
+  Backend?.setBio(arg);
 });
 
 if (process.env.NODE_ENV === 'production') {

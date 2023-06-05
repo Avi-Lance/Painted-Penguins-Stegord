@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import ProfileSettings from './ProfileSettings';
 import Chat from './Chat';
-import FindFriends from './FindFriends'
+import FindFriends from './FindFriends';
 
 const { Content } = Layout;
 
