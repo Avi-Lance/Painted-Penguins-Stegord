@@ -26,6 +26,7 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 let Backend: BackendManager | null = null;
+
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
@@ -55,14 +56,14 @@ ipcMain.handle('listChats', async (event, arg) => {
   return data;
 });
 
+ipcMain.handle('configureBackend', async (event, data) => {
+  return Backend?.setToken(data[0]);
+});
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
 }
-ipcMain.handle('configureBackend', async (event, data) => {
-  return Backend?.setToken(data[0]);
-});
 
 const isDebug =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
@@ -138,10 +139,15 @@ const createWindow = async () => {
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
-
-  const currentDirectory = app.getAppPath();
-  const resources = `${currentDirectory}/src/main/client/`;
-  Backend = new BackendManager(null, `${resources}image.png`, resources);
+  if (isDebug) {
+    const currentDirectory = app.getAppPath();
+    const resources = `${currentDirectory}/src/main/client/`;
+    Backend = new BackendManager(null, `${resources}image.png`, resources);
+  } else {
+    const currentDirectory = process.resourcesPath;
+    const resources = `${currentDirectory}/src/main/client/`;
+    Backend = new BackendManager(null, `${resources}image.png`, resources);
+  }
 };
 
 /**
