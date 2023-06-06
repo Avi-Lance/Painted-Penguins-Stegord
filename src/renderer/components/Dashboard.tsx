@@ -8,16 +8,48 @@ import Sidebar from './Sidebar';
 import ProfileSettings from './ProfileSettings';
 import Chat from './Chat';
 import FindFriends from './FindFriends';
+import Conversations from './Conversations';
 
 const { Content } = Layout;
 
 type UserBioMap = Record<string, string>;
+
+interface ChatData {
+  friends: Record<string, string>;
+  groups: Record<string, string>;
+}
+
+function convertToChatData(jsonData: string): ChatData {
+  const parsedData = JSON.parse(jsonData) as {
+    friends: Record<string, string>;
+    groups: Record<string, string>;
+  };
+
+  const chatData: ChatData = {
+    friends: {},
+    groups: {},
+  };
+
+  Object.entries(parsedData.friends).forEach(([chatId, username]) => {
+    chatData.friends[chatId] = username;
+  });
+
+  Object.entries(parsedData.groups).forEach(([chatId, chatName]) => {
+    chatData.groups[chatId] = chatName;
+  });
+
+  return chatData;
+}
 
 // Define the UserBioMap type
 export default function Dashboard() {
   const [users, setUsers] = useState({ name: 'username' });
   const [user, setUser] = useState<AmplifyUser | null>(null);
   const [bio, setBio] = useState<string>('N/A');
+  const [conversations, setConversations] = useState<ChatData>({
+    friends: {},
+    groups: {},
+  });
 
   function listUsers() {
     return window.electron.ipcRenderer
@@ -38,6 +70,16 @@ export default function Dashboard() {
       });
   }
 
+  function getConversations() {
+    return window.electron.ipcRenderer
+      .invoke('listChats', [{}])
+      .then((data) => {
+        const chat = convertToChatData(JSON.stringify(data));
+        setConversations(chat);
+        console.log(conversations);
+      });
+  }
+
   useEffect(() => {
     Auth.currentUserInfo().then((userdata) => {
       window.electron.ipcRenderer
@@ -51,6 +93,9 @@ export default function Dashboard() {
           console.log(users[userdata?.username]);
           setBio(users[userdata?.username]);
           setUser(JSON.parse(JSON.stringify(userdata)));
+        })
+        .then(() => {
+          getConversations();
         });
     });
   }, []);
@@ -61,7 +106,10 @@ export default function Dashboard() {
       <Content>
         <div className="body_page">
           <Routes>
-            <Route path="/chat" element={<Chat />} />
+            <Route
+              path="/chat"
+              element={<Conversations chatData={conversations} />}
+            />
             <Route
               path="/my_profile"
               element={<ProfileSettings username={user?.username} bio={bio} />}
