@@ -1,9 +1,5 @@
-import { useState } from 'react';
 import { Avatar, Typography, Form, Input, Button } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import { AmplifyUser } from '@aws-amplify/ui';
-
-
 const { Title, Text } = Typography;
 const UserOutlinedIcon = UserOutlined as React.ComponentType<any>;
 
@@ -11,7 +7,8 @@ const { TextArea } = Input;
 
 interface ProfileSettingsProps {
   username: string | undefined;
-  bio: string
+  bio: string;
+  setUserBio: (bio: string) => void;
 }
 
 function submitBio(bio: string) {
@@ -19,10 +16,8 @@ function submitBio(bio: string) {
 }
 
 export default function ProfileSettings(props: ProfileSettingsProps) {
-  const [userBio, setUserBio] = useState<string>(props.bio);
-
   const changeBio = (event) => {
-    setUserBio(event.target.value);
+    props.setUserBio(event.target.value);
   };
 
   return (
@@ -32,11 +27,11 @@ export default function ProfileSettings(props: ProfileSettingsProps) {
       <Title level={5}>Bio</Title>
       <Form>
         <Form.Item>
-          <TextArea rows={4} onChange={changeBio} defaultValue={userBio} />
+          <TextArea rows={4} onChange={changeBio} defaultValue={props.bio} />
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" onClick={() => submitBio(userBio)}>
+          <Button type="primary" onClick={() => submitBio(props.bio)}>
             Submit Changes
           </Button>
         </Form.Item>

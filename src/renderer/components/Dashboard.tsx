@@ -61,13 +61,8 @@ export default function Dashboard() {
       });
   }
 
-  function getUserBio() {
-    return window.electron.ipcRenderer
-      .invoke('getUserBio', user?.username)
-      .then((data) => {
-        setBio(data);
-        console.log(data);
-      });
+  function setUserBio(bio: string) {
+    setBio(bio);
   }
 
   function getConversations() {
@@ -112,7 +107,13 @@ export default function Dashboard() {
             />
             <Route
               path="/my_profile"
-              element={<ProfileSettings username={user?.username} bio={bio} />}
+              element={
+                <ProfileSettings
+                  username={user?.username}
+                  bio={bio}
+                  setUserBio={setUserBio}
+                />
+              }
             />
             <Route
               path="/find_friends"
