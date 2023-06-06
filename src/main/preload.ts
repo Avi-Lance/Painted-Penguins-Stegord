@@ -8,7 +8,8 @@ export type Channels =
   | 'listUsers'
   | 'addFriend'
   | 'setBio'
-  | 'getUserBio';
+  | 'getUserBio'
+  | 'listChats';
 
 const electronHandler = {
   ipcRenderer: {
