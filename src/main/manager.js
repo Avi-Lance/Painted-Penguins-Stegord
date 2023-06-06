@@ -15,7 +15,7 @@ module.exports = class BackendManager {
   setToken(cognitoToken) {
     this.token = cognitoToken;
     return new Promise((resolve, reject) => {
-      resolve(true)
+      resolve(true);
     });
   }
 
@@ -34,14 +34,14 @@ module.exports = class BackendManager {
   */
   getMessages(justNew) {
     // Decide message breadth parameter
-    var breadth = 'all';
+    let breadth = 'all';
     if (justNew === true) {
       breadth = 'new';
     }
 
     // Spawn child process
-    var command = spawn('python3', [
-      this.dir + 'get_messages.py',
+    const command = spawn('python3', [
+      `${this.dir}get_messages.py`,
       this.image,
       breadth,
       this.token,
@@ -55,8 +55,8 @@ module.exports = class BackendManager {
   including the one just sent
   */
   sendMessage(chatId, message) {
-    var command = spawn('python3', [
-      this.dir + 'send_message.py',
+    const command = spawn('python3', [
+      `${this.dir}send_message.py`,
       this.image,
       chatId,
       message,
@@ -72,8 +72,8 @@ module.exports = class BackendManager {
     {"error": message}
   */
   setBio(bio) {
-    var command = spawn('python3', [
-      this.dir + 'set_bio.py',
+    const command = spawn('python3', [
+      `${this.dir}set_bio.py`,
       this.image,
       bio,
       this.token,
@@ -90,17 +90,16 @@ module.exports = class BackendManager {
   */
   listUsers() {
     console.log('I am activating the list users command!');
-    var command = spawn('python3', [this.dir + 'list_users.py', this.token]);
+    const command = spawn('python3', [`${this.dir}list_users.py`, this.token]);
     return this.createCommandPromise(command);
   }
 
   getUserBio(username) {
     return this.listUsers().then((data) => {
       if (data.hasOwnProperty(username)) {
-        console.log(username)
-        console.log(data)
+        console.log(username);
+        console.log(data);
         return data[username];
-
       }
       return null;
     });
@@ -118,7 +117,7 @@ module.exports = class BackendManager {
   }
   */
   listChats() {
-    var command = spawn('python3', [this.dir + 'list_chats.py', this.token]);
+    const command = spawn('python3', [`${this.dir}list_chats.py`, this.token]);
     return this.createCommandPromise(command);
   }
 
@@ -129,8 +128,8 @@ module.exports = class BackendManager {
     {"error": message}
   */
   leaveChat(chatId) {
-    var command = spawn('python3', [
-      this.dir + 'leave_chat.py',
+    const command = spawn('python3', [
+      `${this.dir}leave_chat.py`,
       this.image,
       chatId,
       this.token,
@@ -145,8 +144,8 @@ module.exports = class BackendManager {
     {"error": message}
   */
   joinChat(chatId) {
-    var command = spawn('python3', [
-      this.dir + 'join_chat.py',
+    const command = spawn('python3', [
+      `${this.dir}join_chat.py`,
       this.image,
       chatId,
       this.token,
@@ -158,8 +157,8 @@ module.exports = class BackendManager {
   {"chat_id": int}
   */
   createChat(chatName) {
-    var command = spawn('python3', [
-      this.dir + 'create_chat.py',
+    const command = spawn('python3', [
+      `${this.dir}create_chat.py`,
       this.image,
       chatName,
       this.token,
@@ -171,8 +170,8 @@ module.exports = class BackendManager {
   {"chat_id": int}
   */
   addFriend(friendName) {
-    var command = spawn('python3', [
-      this.dir + 'add_friend.py',
+    const command = spawn('python3', [
+      `${this.dir}add_friend.py`,
       this.image,
       friendName,
       this.token,
