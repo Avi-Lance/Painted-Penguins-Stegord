@@ -41,7 +41,7 @@ export default function Dashboard() {
   useEffect(() => {
     Auth.currentUserInfo().then((userdata) => {
       window.electron.ipcRenderer
-        .invoke('configureBackend', [user?.username])
+        .invoke('configureBackend', [userdata?.username])
         .then(() => {
           return listUsers();
         })
