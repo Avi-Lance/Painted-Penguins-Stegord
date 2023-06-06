@@ -19,10 +19,10 @@ function submitBio(bio: string) {
 }
 
 export default function ProfileSettings(props: ProfileSettingsProps) {
+  const [userBio, setUserBio] = useState<string>(props.bio);
 
   const changeBio = (event) => {
     setUserBio(event.target.value);
-    submitBio(event.target.value);
   };
 
   return (
@@ -32,11 +32,11 @@ export default function ProfileSettings(props: ProfileSettingsProps) {
       <Title level={5}>Bio</Title>
       <Form>
         <Form.Item>
-          <TextArea rows={4} onChange={changeBio} defaultValue={props.bio} />
+          <TextArea rows={4} onChange={changeBio} defaultValue={userBio} />
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" onClick={() => setUserBio(userBio)}>
+          <Button type="primary" onClick={() => submitBio(userBio)}>
             Submit Changes
           </Button>
         </Form.Item>
