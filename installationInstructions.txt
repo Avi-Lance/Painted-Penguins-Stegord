@@ -1,0 +1,7 @@
+Ensure you have Python3 installed on your system. 
+We haven't tested which versions of Python do and do not work but we developed it in python3.10.
+
+Then you need to run setup[.sh/.psh.bat] depending on your OS.
+Note, all it is doing is installing the dependencies in requirements.txt with python3.
+
+Then run the Electron installer and it should work.
