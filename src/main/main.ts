@@ -33,7 +33,7 @@ ipcMain.on('ipc-example', async (event, arg) => {
 });
 
 ipcMain.handle('listUsers', async (event, arg) => {
-  return Backend?.listUsers()
+  return Backend?.listUsers();
 });
 
 ipcMain.handle('addFriend', async (event, arg) => {
@@ -45,8 +45,14 @@ ipcMain.handle('setBio', async (event, arg) => {
 });
 
 ipcMain.handle('getUserBio', async (event, arg) => {
-  console.log(arg)
+  console.log(arg);
   return Backend?.getUserBio(arg);
+});
+
+ipcMain.handle('listChats', async (event, arg) => {
+  const data = await Backend?.listChats();
+  console.log(data);
+  return data;
 });
 
 
