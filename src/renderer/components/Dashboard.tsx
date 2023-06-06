@@ -102,6 +102,10 @@ export default function Dashboard() {
         <div className="body_page">
           <Routes>
             <Route
+              path="/"
+              element={<Conversations chatData={conversations} />}
+            />
+            <Route
               path="/chat"
               element={<Conversations chatData={conversations} />}
             />
