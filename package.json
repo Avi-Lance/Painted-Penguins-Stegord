@@ -180,7 +180,8 @@
     "appId": "org.erb.ElectronReact",
     "asar": true,
     "asarUnpack": [
-      "**\\*.{node,dll}"
+      "**\\*.{node,dll}",
+      "./src/main/client/**"
     ],
     "files": [
       "dist",
