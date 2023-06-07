@@ -61,6 +61,11 @@ ipcMain.handle('joinChat', async (event, arg) => {
   console.log(data);
 });
 
+ipcMain.handle('leaveChat', async (event, arg) => {
+  const data = await Backend?.leaveChat(arg);
+  console.log(data);
+});
+
 ipcMain.handle('getMessages', async (event, arg) => {
   const data = await Backend?.getMessages(false);
   console.log(data);
