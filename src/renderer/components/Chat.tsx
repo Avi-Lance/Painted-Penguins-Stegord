@@ -37,10 +37,16 @@ export default function Chat() {
 
   useEffect(() => {
     window.electron.ipcRenderer.invoke('joinChat', chatId).then(() => {
-      window.electron.ipcRenderer.invoke('getMessages', null).then(() => {
+      window.electron.ipcRenderer.invoke('getMessages', null).then((data) => {
         console.log(data);
       });
     });
+
+    return () => {
+      window.electron.ipcRenderer.invoke('leaveChat', chatId).then(() => {
+        console.log(`left chat ${chatId}`);
+      });
+    };
   }, []);
 
   return (
