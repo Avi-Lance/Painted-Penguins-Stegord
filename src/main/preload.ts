@@ -9,7 +9,10 @@ export type Channels =
   | 'addFriend'
   | 'setBio'
   | 'getUserBio'
-  | 'listChats';
+  | 'listChats'
+  | 'joinChat'
+  | 'getMessages'
+  | 'sendMessage';
 
 const electronHandler = {
   ipcRenderer: {
