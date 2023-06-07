@@ -29,7 +29,7 @@ export default function Sidebar() {
           }
         }}
         items={[
-          { label: 'Chat', key: '/chat' },
+          { label: 'Chat', key: '/conversations' },
           { label: 'Find Friends', key: '/find_friends' },
           { label: 'My Profile', key: '/my_profile' },
           { label: 'Sign Out', key: 'signout' },
