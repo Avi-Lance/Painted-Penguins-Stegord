@@ -11,6 +11,7 @@ export type Channels =
   | 'getUserBio'
   | 'listChats'
   | 'joinChat'
+  | 'leaveChat'
   | 'getMessages'
   | 'sendMessage';
 
