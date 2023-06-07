@@ -106,7 +106,7 @@ export default function Dashboard() {
               element={<Conversations chatData={conversations} />}
             />
             <Route
-              path="/chat"
+              path="/conversations"
               element={<Conversations chatData={conversations} />}
             />
             <Route
@@ -123,6 +123,7 @@ export default function Dashboard() {
               path="/find_friends"
               element={<FindFriends users={users} />}
             />
+            <Route path="/chat" element={<Chat />} />
           </Routes>
         </div>
       </Content>
