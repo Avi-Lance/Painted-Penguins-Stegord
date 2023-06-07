@@ -46,6 +46,9 @@ module.exports = class BackendManager {
       breadth,
       this.token,
     ]);
+
+    console.log(`python3 ${this.dir}get_messages.py ${this.image} ${breadth} ${this.token}`);
+
     return this.createCommandPromise(command);
   }
 
@@ -118,6 +121,7 @@ module.exports = class BackendManager {
   */
   listChats() {
     const command = spawn('python3', [`${this.dir}list_chats.py`, this.token]);
+    console.log(`python3 ${this.dir}list_chats.py ${this.token}`);
     return this.createCommandPromise(command);
   }
 
