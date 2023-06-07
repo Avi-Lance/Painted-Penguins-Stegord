@@ -56,6 +56,21 @@ ipcMain.handle('listChats', async (event, arg) => {
   return data;
 });
 
+ipcMain.handle('joinChat', async (event, arg) => {
+  const data = await Backend?.joinChat(arg);
+  console.log(data);
+});
+
+ipcMain.handle('getMessages', async (event, arg) => {
+  const data = await Backend?.getMessages(false);
+  console.log(data);
+  return data;
+});
+
+// ipcMain.handle('sendMessage' async (event, arg) => {
+//   const data = await Backend?.getMessages(false);
+// });
+
 ipcMain.handle('configureBackend', async (event, data) => {
   return Backend?.setToken(data[0]);
 });
