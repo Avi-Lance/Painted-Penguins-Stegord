@@ -13,6 +13,7 @@ interface ProfileSettingsProps {
 
 function submitBio(bio: string) {
   window.electron.ipcRenderer.invoke('setBio', bio);
+  alert("Successfully changed bio");
 }
 
 export default function ProfileSettings(props: ProfileSettingsProps) {
