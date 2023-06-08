@@ -14,10 +14,11 @@ export default function Friend({ you, chatId, name }: FriendData) {
     <div className="user_list_item">
       <p>{name}</p>
       <div>
-        <Button type="primary">View Profile</Button>
         <Button
           type="primary"
-          onClick={() => navigate(`/chat?you=${you}&name=${name}&chatId=${chatId}`)}
+          onClick={() =>
+            navigate(`/chat?you=${you}&name=${name}&chatId=${chatId}`)
+          }
         >
           Chat
         </Button>
