@@ -34,7 +34,7 @@ ipcMain.on('ipc-example', async (event, arg) => {
 });
 
 ipcMain.handle('getUsername', async (event, arg) => {
-  return await Backend?.getUsername()
+  return await Backend?.getUsername();
 });
 
 ipcMain.handle('listUsers', async (event, arg) => {
