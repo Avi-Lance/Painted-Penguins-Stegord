@@ -19,6 +19,10 @@ module.exports = class BackendManager {
     });
   }
 
+  getUsername() {
+    return this.token;
+  }
+
   /*
   {
     "<chat id 1>": [
