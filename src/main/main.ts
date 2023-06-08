@@ -33,6 +33,10 @@ ipcMain.on('ipc-example', async (event, arg) => {
   return 'pong';
 });
 
+ipcMain.handle('getUsername', async (event, arg) => {
+  return await Backend?.getUsername()
+});
+
 ipcMain.handle('listUsers', async (event, arg) => {
   return Backend?.listUsers();
 });
@@ -72,9 +76,12 @@ ipcMain.handle('getMessages', async (event, arg) => {
   return data;
 });
 
-// ipcMain.handle('sendMessage' async (event, arg) => {
-//   const data = await Backend?.getMessages(false);
-// });
+ipcMain.handle('sendMessage', async (event, arg) => {
+  const chatId = arg[0];
+  const message = arg[1];
+  const data = await Backend?.sendMessage(chatId, message);
+  return data;
+});
 
 ipcMain.handle('configureBackend', async (event, data) => {
   return Backend?.setToken(data[0]);
