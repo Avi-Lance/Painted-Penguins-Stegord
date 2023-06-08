@@ -9,6 +9,7 @@ import ProfileSettings from './ProfileSettings';
 import Chat from './Chat';
 import FindFriends from './FindFriends';
 import Conversations from './Conversations';
+import Profile from './Profile';
 
 const { Content } = Layout;
 
@@ -126,6 +127,7 @@ export default function Dashboard() {
               element={<FindFriends users={users} />}
             />
             <Route path="/chat" element={<Chat />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </div>
       </Content>
