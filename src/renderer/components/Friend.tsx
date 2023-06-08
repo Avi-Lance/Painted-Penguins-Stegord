@@ -4,9 +4,10 @@ import { Button } from 'antd';
 interface FriendData {
   chatId: string;
   name: string;
+  you: string;
 }
 
-export default function Friend({ chatId, name }: FriendData) {
+export default function Friend({ you, chatId, name }: FriendData) {
   const navigate = useNavigate();
 
   return (
@@ -16,7 +17,7 @@ export default function Friend({ chatId, name }: FriendData) {
         <Button type="primary">View Profile</Button>
         <Button
           type="primary"
-          onClick={() => navigate(`/chat?name=${name}&chatId=${chatId}`)}
+          onClick={() => navigate(`/chat?you=${you}&name=${name}&chatId=${chatId}`)}
         >
           Chat
         </Button>

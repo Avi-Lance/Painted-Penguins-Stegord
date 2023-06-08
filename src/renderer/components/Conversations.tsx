@@ -3,6 +3,7 @@ import Friend from './Friend';
 interface ChatData {
   friends: Record<string, string>;
   groups: Record<string, string>;
+  you: string;
 }
 
 interface ChildComponentProps {
@@ -21,7 +22,12 @@ export default function Conversations({ chatData }: ChildComponentProps) {
       <h2>Friends:</h2>
       <div className="friend_list">
         {Object.entries(chatData.friends).map(([chatId, username]) => (
-          <Friend key={chatId} chatId={chatId} name={username} />
+          <Friend
+            key={chatId}
+            you={chatData.you}
+            chatId={chatId}
+            name={username}
+          />
         ))}
       </div>
 

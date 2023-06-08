@@ -31,6 +31,7 @@ function convertToChatData(json: { [key: string]: any[] }): ChatData {
 export default function Chat() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
+  const you = searchParams.get('you');
   const name = searchParams.get('name');
   const chatId = searchParams.get('chatId');
   const [messages, setMessages] = useState<ChatData>({});
@@ -38,7 +39,8 @@ export default function Chat() {
   useEffect(() => {
     window.electron.ipcRenderer.invoke('joinChat', chatId).then(() => {
       window.electron.ipcRenderer.invoke('getMessages', null).then((data) => {
-        console.log(data);
+        setMessages(convertToChatData(data));
+        console.log(messages);
       });
     });
 
@@ -53,101 +55,16 @@ export default function Chat() {
     <>
       <h1>You are chatting with {name}</h1>
       <div className="chat_body">
-        <Message
-          author="Alice"
-          timestamp="9:00 AM"
-          message="Hey, how are you?"
-        />
-        <Message
-          author="you"
-          timestamp="9:05 AM"
-          message="Hi Alice! I'm doing great. How about you?"
-        />
-        <Message
-          author="Alice"
-          timestamp="9:07 AM"
-          message="I'm good too, thanks for asking. Did you finish that project?"
-        />
-        <Message
-          author="you"
-          timestamp="9:10 AM"
-          message="Yes, I completed it yesterday. It was quite challenging, but I'm happy with the outcome."
-        />
-        <Message
-          author="Alice"
-          timestamp="9:12 AM"
-          message="That's awesome! I knew you could do it. We should celebrate sometime."
-        />
-        <Message
-          author="you"
-          timestamp="9:15 AM"
-          message="Absolutely! Let's plan for dinner this weekend. I'll check my schedule and let you know."
-        />
-        <Message
-          author="Alice"
-          timestamp="9:18 AM"
-          message="Sounds like a plan. Looking forward to it!"
-        />
-        <Message
-          author="you"
-          timestamp="9:20 AM"
-          message="Me too. Have a great day, Alice!"
-        />
-        <Message
-          author="Alice"
-          timestamp="9:22 AM"
-          message="You too! Take care and see you soon."
-        />
-        <Message
-          author="you"
-          timestamp="9:25 AM"
-          message="Bye Alice! Have a great day ahead!"
-        />
-        <Message
-          author="Alice"
-          timestamp="9:28 AM"
-          message="Goodbye! Take care and talk to you soon!"
-        />
-        <Message
-          author="Alice"
-          timestamp="9:28 AM"
-          message="Goodbye! Take care and talk to you soon!"
-        />
-        <Message
-          author="Alice"
-          timestamp="9:28 AM"
-          message="Goodbye! Take care and talk to you soon!"
-        />
-        <Message
-          author="you"
-          timestamp="9:20 AM"
-          message="Me too. Have a great day, Alice!"
-        />
-        <Message
-          author="you"
-          timestamp="9:20 AM"
-          message="Me too. Have a great day, Alice!"
-        />
-        <Message
-          author="you"
-          timestamp="9:20 AM"
-          message="Me too. Have a great day, Alice!"
-        />
-        <Message
-          author="you"
-          timestamp="9:20 AM"
-          message="Me too. Have a great day, Alice!"
-        />
-        <Message
-          author="you"
-          timestamp="9:20 AM"
-          message="Me too. Have a great day, Alice!"
-        />
-        <Message
-          author="you"
-          timestamp="9:20 AM"
-          message="Me too. Have a great day, Alice!"
-        />
+        {Object.values(messages).map((chatMessages) =>
+          chatMessages.map((message, index) => (
+            <Message
+              key={index}
+              you={you}
+              author={message.sender}
+              message={message.message}
+            />
+          ))
+        )}
       </div>
       <div className="message_create">
         <Input placeholder="Type a message" />

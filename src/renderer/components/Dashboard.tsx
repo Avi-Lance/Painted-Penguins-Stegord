@@ -17,6 +17,7 @@ type UserBioMap = Record<string, string>;
 interface ChatData {
   friends: Record<string, string>;
   groups: Record<string, string>;
+  you: string;
 }
 
 function convertToChatData(jsonData: string): ChatData {
@@ -28,6 +29,7 @@ function convertToChatData(jsonData: string): ChatData {
   const chatData: ChatData = {
     friends: {},
     groups: {},
+    you: '',
   };
 
   Object.entries(parsedData.friends).forEach(([chatId, username]) => {
@@ -49,6 +51,7 @@ export default function Dashboard() {
   const [conversations, setConversations] = useState<ChatData>({
     friends: {},
     groups: {},
+    you: '',
   });
 
   function listUsers() {
@@ -69,7 +72,8 @@ export default function Dashboard() {
     return window.electron.ipcRenderer
       .invoke('listChats', [{}])
       .then((data) => {
-        const chat = convertToChatData(JSON.stringify(data));
+        let chat = convertToChatData(JSON.stringify(data));
+        chat.you = user?.username;
         setConversations(chat);
         console.log(conversations);
       });
@@ -87,7 +91,7 @@ export default function Dashboard() {
           console.log(userdata);
           console.log(users[userdata?.username]);
           setBio(users[userdata?.username]);
-          setUser(JSON.parse(JSON.stringify(userdata)));
+          setUser(userdata);
         })
         .then(() => {
           getConversations();
