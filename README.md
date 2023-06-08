@@ -19,9 +19,7 @@ Last Modified May 17, 2023
 ## Technologies
 
 * React
-
-* Redux
-
+* 
 * Electron
 
 * Ant Design
