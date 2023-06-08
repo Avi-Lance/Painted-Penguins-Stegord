@@ -1,7 +1,9 @@
 import { Button } from 'antd';
 
 function addFriend(name) {
-  window.electron.ipcRenderer.sendMessage('addFriend', name);
+  window.electron.ipcRenderer.invoke('addFriend', name).then(() => {
+    alert(`You added ${name}`);
+  });
 }
 
 export default function User({ name }) {
