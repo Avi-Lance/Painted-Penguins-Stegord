@@ -51,7 +51,6 @@ export default function Dashboard() {
   const [conversations, setConversations] = useState<ChatData>({
     friends: {},
     groups: {},
-    you: '',
   });
 
   function listUsers() {
@@ -73,7 +72,6 @@ export default function Dashboard() {
       .invoke('listChats', [{}])
       .then((data) => {
         let chat = convertToChatData(JSON.stringify(data));
-        chat.you = user?.username;
         setConversations(chat);
         console.log(conversations);
       });

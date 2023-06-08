@@ -17,6 +17,7 @@ interface ChildComponentProps {
 */
 
 export default function Conversations({ chatData }: ChildComponentProps) {
+
   return (
     <>
       <h2>Friends:</h2>
@@ -24,7 +25,6 @@ export default function Conversations({ chatData }: ChildComponentProps) {
         {Object.entries(chatData.friends).map(([chatId, username]) => (
           <Friend
             key={chatId}
-            you={chatData.you}
             chatId={chatId}
             name={username}
           />

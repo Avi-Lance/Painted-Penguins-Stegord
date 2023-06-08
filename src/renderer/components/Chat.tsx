@@ -28,15 +28,45 @@ function convertToChatData(json: { [key: string]: any[] }): ChatData {
   return chatData;
 }
 
+function appendChatData(targetData: ChatData, newData: ChatData): ChatData {
+  const mergedData: ChatData = { ...targetData };
+
+  Object.keys(newData).forEach((chatId) => {
+    if (Object.prototype.hasOwnProperty.call(mergedData, chatId)) {
+      mergedData[chatId] = [...mergedData[chatId], ...newData[chatId]];
+    } else {
+      mergedData[chatId] = [...newData[chatId]];
+    }
+  });
+
+  return mergedData;
+}
+
 export default function Chat() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const you = searchParams.get('you');
   const name = searchParams.get('name');
   const chatId = searchParams.get('chatId');
+  const [username, setUsername] = useState<string>();
   const [messages, setMessages] = useState<ChatData>({});
+  const [message, setMessage] = useState<string>('');
+
+  const sendMessage: void = () => {
+    setMessage('');
+
+    window.electron.ipcRenderer
+      .invoke('sendMessage', [chatId, message])
+      .then((data) => {
+        setMessages(appendChatData(messages, convertToChatData(data)));
+      });
+  };
 
   useEffect(() => {
+    window.electron.ipcRenderer.invoke('getUsername', [{}]).then((data) => {
+      setUsername(data);
+    });
+
     window.electron.ipcRenderer.invoke('joinChat', chatId).then(() => {
       window.electron.ipcRenderer.invoke('getMessages', null).then((data) => {
         setMessages(convertToChatData(data));
@@ -51,24 +81,33 @@ export default function Chat() {
     };
   }, []);
 
+  const sortedMessages = Object.values(messages)
+    .flatMap((chatMessages) => chatMessages)
+    .sort((a, b) => a.order_num - b.order_num);
+
   return (
     <>
       <h1>You are chatting with {name}</h1>
       <div className="chat_body">
-        {Object.values(messages).map((chatMessages) =>
-          chatMessages.map((message, index) => (
-            <Message
-              key={index}
-              you={you}
-              author={message.sender}
-              message={message.message}
-            />
-          ))
-        )}
+        {sortedMessages.map((message) => (
+          <Message
+            key={message.id}
+            you={username}
+            author={message.sender}
+            message={message.message}
+          />
+        ))}
       </div>
       <div className="message_create">
-        <Input placeholder="Type a message" />
-        <Button type="primary">Send</Button>
+        <Input
+          value={message}
+          onChange={(event) => {
+            setMessage(event.target.value);
+          }}
+        />
+        <Button type="primary" onClick={sendMessage}>
+          Send
+        </Button>
       </div>
     </>
   );
