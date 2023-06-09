@@ -19,7 +19,7 @@ Last Modified May 17, 2023
 ## Technologies
 
 * React
-* 
+
 * Electron
 
 * Ant Design
@@ -47,6 +47,8 @@ npm install
 ```
 
 ## Starting Development
+
+Ensure you have python3 installed on your machine then run setup.sh
 
 Start the app in the `dev` environment:
 
