@@ -97,3 +97,18 @@
   border-style: solid;
   width: 80%;
 }
+
+.chat_header_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat_header {
+  display: flex;
+  align-items: center;
+}
+
+.chat_header > h1 {
+  margin-right: 12px;
+}

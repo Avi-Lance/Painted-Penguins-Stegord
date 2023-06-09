@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button, Input } from 'antd';
+import { RedoOutlined } from '@ant-design/icons';
 import Message from './Message';
 
 interface ChatMessage {
@@ -62,13 +63,20 @@ export default function Chat() {
       });
   };
 
+  const refreshConversation: void = () => {
+    window.electron.ipcRenderer.invoke('getMessages', true).then((data) => {
+      setMessages(appendChatData(messages, convertToChatData(data)));
+      console.log(messages);
+    });
+  };
+
   useEffect(() => {
     window.electron.ipcRenderer.invoke('getUsername', [{}]).then((data) => {
       setUsername(data);
     });
 
     window.electron.ipcRenderer.invoke('joinChat', chatId).then(() => {
-      window.electron.ipcRenderer.invoke('getMessages', null).then((data) => {
+      window.electron.ipcRenderer.invoke('getMessages', false).then((data) => {
         setMessages(convertToChatData(data));
         console.log(messages);
       });
@@ -87,7 +95,17 @@ export default function Chat() {
 
   return (
     <>
-      <h1>You are chatting with {name}</h1>
+      <div className="chat_header_container">
+        <div className="chat_header">
+          <h1>You are chatting with {name}</h1>
+          <Button
+            type="primary"
+            shape="circle"
+            icon={<RedoOutlined />}
+            onClick={refreshConversation}
+          />
+        </div>
+      </div>
       <div className="chat_body">
         {sortedMessages.map((message) => (
           <Message
