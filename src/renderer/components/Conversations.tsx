@@ -31,7 +31,7 @@ export default function Conversations({ chatData }: ChildComponentProps) {
         ))}
       </div>
 
-      <h2>Groups:</h2>
+      <h2>Groups (Coming Soon!!):</h2>
       <ul>
         {Object.entries(chatData.groups).map(([chatId, chatName]) => (
           <li key={chatId}>
